@@ -8,18 +8,17 @@ import Button from '@mui/material/Button';
 import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
 
-interface FullScreenModalProps {
+interface FullScreenSearchModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSearch: (name: string, tags: string[]) => void;
+  onSearch: (name: string) => void;
 }
 
-const FullScreenModal: React.FC<FullScreenModalProps> = ({ isOpen, onClose, onSearch }) => {
+const FullScreenSearchModal: React.FC<FullScreenSearchModalProps> = ({ isOpen, onClose, onSearch }) => {
   const [name, setName] = useState('');
-  const [tags, setTags] = useState('');
 
   const handleSearch = () => {
-    onSearch(name, tags.split(',').map(tag => tag.trim()));
+    onSearch(name);
     onClose();
   };
 
@@ -45,14 +44,6 @@ const FullScreenModal: React.FC<FullScreenModalProps> = ({ isOpen, onClose, onSe
           onChange={(e) => setName(e.target.value)}
           style={{ marginBottom: 16, marginTop: 16 }}
         />
-        <TextField
-          fullWidth
-          label="Tags (comma separated)"
-          variant="outlined"
-          value={tags}
-          onChange={(e) => setTags(e.target.value)}
-          style={{ marginBottom: 16 }}
-        />
       </DialogContent>
       <DialogActions>
         <Button style={{ marginBottom: 28, height: '3.5rem' }} fullWidth onClick={handleSearch} variant="contained" color="primary">
@@ -63,4 +54,4 @@ const FullScreenModal: React.FC<FullScreenModalProps> = ({ isOpen, onClose, onSe
   );
 };
 
-export default FullScreenModal;
+export default FullScreenSearchModal;
