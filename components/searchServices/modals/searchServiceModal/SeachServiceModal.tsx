@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React  from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
@@ -7,24 +7,11 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
-
-interface FullScreenSearchModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onSearch: (name: string) => void;
-}
-
+import { FullScreenSearchModalProps } from './SearchServiceModal.types';
+import { usePriceRangeModal } from './SearchServiceModal.hooks';
 const FullScreenSearchModal: React.FC<FullScreenSearchModalProps> = ({ isOpen, onClose, onSearch }) => {
-  const [name, setName] = useState('');
 
-  const handleSearch = () => {
-    onSearch(name);
-    onClose();
-  };
-
-  useEffect(() => {
-    console.log(isOpen)
-  }, [isOpen]);
+  const { name, setName, location, setLocation, handleSearch } = usePriceRangeModal({ isOpen, onClose, onSearch });
 
   return (
     <Dialog fullScreen open={isOpen} onClose={onClose}>
@@ -43,6 +30,14 @@ const FullScreenSearchModal: React.FC<FullScreenSearchModalProps> = ({ isOpen, o
           value={name}
           onChange={(e) => setName(e.target.value)}
           style={{ marginBottom: 16, marginTop: 16 }}
+        />
+        <TextField
+          fullWidth
+          label="Location"
+          variant="outlined"
+          value={location}
+          onChange={(e) => setLocation(e.target.value)}
+          style={{ marginBottom: 16 }}
         />
       </DialogContent>
       <DialogActions>

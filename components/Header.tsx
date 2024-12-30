@@ -16,8 +16,8 @@ const Header: React.FC = () => {
             Home
           </Link>
         </Typography>
-        <Link href="/about" className={styles.link} >
-          About
+        <Link href="/services" className={styles.link} >
+          Services
         </Link>
         <Link href="/contact" className={styles.link} >
           Contact

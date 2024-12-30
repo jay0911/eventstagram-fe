@@ -1,6 +1,9 @@
 import { useServices, useServiceStatistics } from './queries/queries';
 import { useState, useEffect } from 'react';
 
+import { Service } from '../../types/ServiceTypes';
+import { useRouter } from 'next/router';
+
 
 export const useSearchPage = () => {
 
@@ -9,14 +12,32 @@ export const useSearchPage = () => {
     const [isSortModalOpen, setIsSortModalOpen] = useState(false);
     const [nameSearch, setNameSearch] = useState<string>('');
     const [currentPage, setCurrentPage] = useState(0);
+    const [availableLocation, setAvailableLocation] = useState<string>('');
     const [selectedPriceRange, setSelectedPriceRange] = useState<{ min: number; max: number } | null>(null);
     const [sortOption, setSortOption] = useState<{ value: string; label: string } | null>(null);
-    const { data, isLoading, error } = useServices(nameSearch, currentPage, sortOption?.value.split(',')[0], sortOption?.value.split(',')[1] as 'asc' | 'desc', selectedPriceRange?.min, selectedPriceRange?.max);
+    const { data, isLoading, error } = useServices(nameSearch, currentPage, sortOption?.value.split(',')[0], sortOption?.value.split(',')[1] as 'asc' | 'desc', selectedPriceRange?.min, selectedPriceRange?.max, availableLocation);
     const { data: statistics, isLoading: statisticsLoading } = useServiceStatistics();
 
+    const [selectedService, setSelectedService] = useState<Service | null>(null);
 
-    const handleSearch = (name: string) => {
+    const router = useRouter();
+  
+    const handleServiceClick = (service: Service) => {
+      setSelectedService(service);
+      // Update URL without page reload
+      router.push(`/services/${service.id}`, undefined, { shallow: true });
+    };
+  
+    const handleBack = () => {
+      setSelectedService(null);
+      window.history.pushState({}, '', '/services');
+    };
+  
+
+
+    const handleSearch = (name: string, location?: string) => {
         setNameSearch(name);
+        setAvailableLocation(location || '');
     };
 
     const onSearchClose = () => {
@@ -100,6 +121,12 @@ export const useSearchPage = () => {
         handleApplySort,
         useScrollDirection,
         handlePageChange,
+        availableLocation,
+        setAvailableLocation,
+        handleServiceClick,
+        handleBack,
+        selectedService,
+        setSelectedService,
     }
 }
 

@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { ServicesResponse, ServiceStatistics } from "types/ServiceTypes";
-import { fetchServices, fetchServiceStatistics } from "utils/fetchServices";
+import { ServicesResponse, ServiceStatistics, Service } from "types/ServiceTypes";
+import { fetchServiceById, fetchServices, fetchServiceStatistics } from "utils/fetchServices";
 
 export const useServices = (
     name: string,
@@ -8,12 +8,13 @@ export const useServices = (
     sortBy: string = 'name',
     sortOrder: 'asc' | 'desc' = 'asc',
     minPrice?: number,
-    maxPrice?: number
+    maxPrice?: number,
+    availableLocation?: string
   ) => {
     return useQuery<ServicesResponse>(
       {
-        queryKey: ['services', name, page, sortBy, sortOrder, minPrice, maxPrice],
-        queryFn: () => fetchServices(name, page, sortBy, sortOrder,minPrice,maxPrice),
+        queryKey: ['services', name, page, sortBy, sortOrder, minPrice, maxPrice, availableLocation],
+        queryFn: () => fetchServices(name, page, sortBy, sortOrder, minPrice, maxPrice, availableLocation),
       }
     );
 };
@@ -23,4 +24,12 @@ export const useServiceStatistics = () => {
     queryKey: ['serviceStatistics'],
     queryFn: () => fetchServiceStatistics(),
   });
+};
+
+export const useServiceById = (id: string) => {
+    return useQuery<Service>({
+        queryKey: ['service', id],
+        queryFn: () => fetchServiceById(id),
+        enabled: !!id,
+    });
 };

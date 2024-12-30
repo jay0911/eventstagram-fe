@@ -10,16 +10,8 @@ import { faDollarSign } from "@fortawesome/free-solid-svg-icons";
 import Slider from "@mui/material/Slider";
 import Typography from "@mui/material/Typography";
 import { BarChart, Bar, XAxis, YAxis } from "recharts";
-import { MedianPrice } from "types/ServiceTypes";
-
-interface FullScreenPriceRangeModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onApply: (range: { min: number; max: number }) => void;
-  priceDistribution: MedianPrice[];
-  minPrice: number;
-  maxPrice: number;
-}
+import { FullScreenPriceRangeModalProps } from "./PriceRangeModal.types";
+import { usePriceRangeModal } from "./PriceRangeModal.hooks";
 
 const FullScreenPriceRangeModal: React.FC<FullScreenPriceRangeModalProps> = ({
   isOpen,
@@ -29,31 +21,15 @@ const FullScreenPriceRangeModal: React.FC<FullScreenPriceRangeModalProps> = ({
   minPrice,
   maxPrice,
 }) => {
-  const [priceRange, setPriceRange] = useState<[number, number]>([minPrice, maxPrice]);
-  const [chartWidth, setChartWidth] = useState(0);
 
-  useEffect(() => {
-    const updateWidth = () => {
-      setChartWidth(window.innerWidth - 48);
-    };
-    updateWidth();
-    window.addEventListener('resize', updateWidth);
-    return () => window.removeEventListener('resize', updateWidth);
-  }, []);
-
-  // Reset price range when min/max prices change
-  useEffect(() => {
-    setPriceRange([minPrice, maxPrice]);
-  }, [minPrice, maxPrice]);
-
-  const handleChange = (event: Event, newValue: number | number[]) => {
-    setPriceRange(newValue as [number, number]);
-  };
-
-  const handleApply = () => {
-    onApply({ min: priceRange[0], max: priceRange[1] });
-    onClose();
-  };
+  const { priceRange, chartWidth, handleChange, handleApply } = usePriceRangeModal({ 
+    isOpen,
+    onClose, 
+    onApply, 
+    minPrice, 
+    maxPrice,
+    priceDistribution 
+  });
 
   return (
     <Dialog fullScreen open={isOpen} onClose={onClose}>

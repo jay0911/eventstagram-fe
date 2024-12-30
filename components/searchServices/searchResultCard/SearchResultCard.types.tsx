@@ -3,4 +3,5 @@ export interface SearchResultCardProps {
     description: string;
     imageUrl: string;
     minPrice: number;
+    onClick: () => void;
   }

@@ -1,5 +1,5 @@
 // utils/fetchServices.ts
-import { ServicesResponse, ServiceStatistics } from '../types/ServiceTypes';
+import { Service, ServicesResponse, ServiceStatistics } from '../types/ServiceTypes';
 
 export const fetchServices = async (
   name: string,
@@ -7,7 +7,8 @@ export const fetchServices = async (
   sortBy: string = 'name',
   sortOrder: 'asc' | 'desc' = 'asc',
   minPrice?: number,
-  maxPrice?: number
+  maxPrice?: number,
+  availableLocation?: string
 ): Promise<ServicesResponse> => {
   const baseUrl = '/api/services/list';
   const params = new URLSearchParams();
@@ -19,6 +20,7 @@ export const fetchServices = async (
   params.append('sortOrder', sortOrder);
   if (minPrice !== undefined) params.append('minPrice', minPrice.toString());
   if (maxPrice !== undefined) params.append('maxPrice', maxPrice.toString());
+  if (availableLocation) params.append('availableLocation', availableLocation);
 
   const url = `${baseUrl}?${params.toString()}`;
 
@@ -38,5 +40,13 @@ export const fetchServiceStatistics = async (): Promise<ServiceStatistics> => {
     throw new Error(`Failed to fetch service statistics. Status: ${response.status}`);
   }
 
+  return response.json();
+};
+
+export const fetchServiceById = async (id: string): Promise<Service> => {
+  const response = await fetch(`/api/services/${id}`);
+  if (!response.ok) {
+      throw new Error('Service not found');
+  }
   return response.json();
 };

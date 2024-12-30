@@ -7,4 +7,5 @@ export interface SearchBarProps {
     onPriceClick: () => void;
     statisticsLoading: boolean;
     selectedPriceRange: { min: number; max: number } | null;
+    availableLocation: string;
   }

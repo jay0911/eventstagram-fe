@@ -10,40 +10,16 @@ import Button from "@mui/material/Button";
 import CloseIcon from "@mui/icons-material/Close";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSort } from "@fortawesome/free-solid-svg-icons";
-
-interface FullScreenSortModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onApply: (selectedOption: { value: string; label: string }) => void; // Pass both value and label to parent
-}
+import { FullScreenSortModalProps } from "./SortServiceModal.types";
+import { useSortServiceModal } from "./SortServiceModal.hooks";
 
 const FullScreenSortModal: React.FC<FullScreenSortModalProps> = ({
   isOpen,
   onClose,
   onApply,
 }) => {
-  const options = [
-    { value: "name,desc", label: "Name, Highest first" },
-    { value: "name,asc", label: "Name, Lowest first" },
-  ];
 
-  const [selectedOption, setSelectedOption] = useState<{
-    value: string;
-    label: string;
-  }>(options[0]); // Default selection
-
-  const handleOptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedValue = event.target.value;
-    const selected = options.find((option) => option.value === selectedValue);
-    if (selected) {
-      setSelectedOption(selected);
-    }
-  };
-
-  const handleApply = () => {
-    onApply(selectedOption); // Pass the selected option (value and label) to the parent
-    onClose(); // Close the dialog
-  };
+  const { options, selectedOption, setSelectedOption, handleOptionChange, handleApply } = useSortServiceModal({ isOpen, onClose, onApply }); 
 
   return (
     <Dialog fullScreen open={isOpen} onClose={onClose}>

@@ -3,17 +3,23 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSort } from "@fortawesome/free-solid-svg-icons";
 import { faMoneyBill } from "@fortawesome/free-solid-svg-icons";
 import { SearchBarProps } from "./SearchBar.types";
+import { useSearchBar } from "./SearchBar.hooks";
 
-const SearchBar: React.FC<SearchBarProps> = ({ selectedPriceRange, statisticsLoading, onSearchClick, onSortClick, onClearAllClick, searchName, sortOption, onPriceClick }) => {
+const SearchBar: React.FC<SearchBarProps> = ({ selectedPriceRange, statisticsLoading, onSearchClick, onSortClick, onClearAllClick, searchName, sortOption, onPriceClick, availableLocation }) => {
+  // Format the placeholder text based on searchName and availableLocation
+  const { getPlaceholderText } = useSearchBar(searchName, availableLocation);
+
   return (
     <div className="p-4 bg-gray">
       {/* Search Input */}
       <div className="flex items-center">
         <input
           type="text"
-          placeholder={searchName ? searchName : 'Click to Search'}
+          placeholder={typeof getPlaceholderText() === 'string' ? getPlaceholderText() as string : 'Click to Search'}
+          value={searchName ? `${searchName}${availableLocation ? `, ${availableLocation}` : ''}` : ''}
           className="w-full p-4 pl-6 border border-gray-300 rounded-full focus:outline-blue-500 placeholder-gray-500 placeholder:text-sm"
           onClick={onSearchClick}
+          readOnly
         />
       </div>
 

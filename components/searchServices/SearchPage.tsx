@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import SearchBar from './searchBar/SearchBar';
 import SearchResultCard from './searchResultCard/SearchResultCard';
-import FullScreenSearchModal from './modals/FullScreenSearchModal';
-import FullScreenSortModal from './modals/FullScreenSortModal';
-import FullScreenPriceRangeModal from './modals/FullScreenPriceRangeModal';
+import FullScreenSearchModal from './modals/searchServiceModal/SeachServiceModal';
+import FullScreenSortModal from './modals/sortSearchServiceModal/FullScreenSortModal';
+import FullScreenPriceRangeModal from './modals/priceRangeSearchServiceModal/PriceRangeModal';
 import Pagination from './pagination/Pagination';
 import { useSearchPage } from './SearchPage.hooks';
+
+import ServiceDetails from './serviceDetail/ServiceDetails';
 
 const SearchPage: React.FC = () => {
 
@@ -32,13 +34,29 @@ const SearchPage: React.FC = () => {
     isPriceModalOpen,
     setIsPriceModalOpen,
     useScrollDirection,
+    availableLocation,
+    selectedService,
+    handleServiceClick,
+    handleBack,
   } = useSearchPage();
-
 
   const scrollDirection = useScrollDirection();
 
   if (isLoading) return <p>Loading services...</p>;
   if (error instanceof Error) return <p>Error: {error.message}</p>;
+
+
+  if (selectedService) {
+    return (
+      <ServiceDetails
+        title={selectedService.name}
+        images={selectedService.images.map((image) => image.resourceUrl)}
+        minPrice={0}
+        description={selectedService.description}
+        onBack={handleBack}
+      />
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -52,13 +70,14 @@ const SearchPage: React.FC = () => {
           onPriceClick={() => setIsPriceModalOpen(true)}
           onClearAllClick={onClearAllClick} 
           searchName={nameSearch} 
+          availableLocation={availableLocation}
           sortOption={sortOption?.label} 
           selectedPriceRange={selectedPriceRange}
         />
       </div>
       <div className="flex-grow p-4 mt-[128px] px-3 md:pl-10 md:pr-10 lg:pl-20 lg:pr-20"> {/* Adjusted margin-top to account for both header and SearchBar */}
         {data?.content.map((result, index) => (
-          <SearchResultCard key={index} title={result.name} description={result.description} imageUrl={result.thumbnail?.resourceUrl} minPrice={result?.priceMin} />
+          <SearchResultCard onClick={() => handleServiceClick(result)} key={index} title={result.name} description={result.description} imageUrl={result.thumbnail?.resourceUrl} minPrice={result?.priceMin} />
         ))}
       </div>
       {/* Add Pagination component */}
