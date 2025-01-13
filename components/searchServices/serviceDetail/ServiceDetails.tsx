@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
-import { HeartIcon, ArrowLeftIcon } from '@heroicons/react/24/outline';
+import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
+import { HeartIcon as HeartOutline } from '@heroicons/react/24/outline';
+import { HeartIcon as HeartSolid } from '@heroicons/react/24/solid';
+import { useLike } from 'hooks/useLike';
+
 
 interface ServiceDetailsProps {
+  id: string;
   title: string;
   description: string;
   images: string[];
@@ -11,12 +16,16 @@ interface ServiceDetailsProps {
 }
 
 const ServiceDetails: React.FC<ServiceDetailsProps> = ({
+  id,
   title,
   description,
   images,
   minPrice,
   onBack,
 }) => {
+
+  const { handleLikeClick, isLoading, likedServices } = useLike({serviceId: id});
+
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const nextImage = (e: React.MouseEvent) => {
@@ -41,8 +50,15 @@ const ServiceDetails: React.FC<ServiceDetailsProps> = ({
             <ArrowLeftIcon className="w-6 h-6 mr-2" />
             <span className="text-lg">Back to results</span>
           </button>
-          <button className="text-gray-700 hover:text-gray-900">
-            <HeartIcon className="w-6 h-6" />
+          <button 
+            onClick={handleLikeClick}
+            disabled={isLoading}
+          >
+            {likedServices.has(id) ? (
+              <HeartSolid className="w-6 h-6 text-red-600" />
+            ) : (
+              <HeartOutline className="w-6 h-6" />
+            )}
           </button>
         </div>
       </div>

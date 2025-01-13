@@ -1,13 +1,20 @@
 import React from 'react';
-import { HeartIcon } from '@heroicons/react/24/outline';
+import { HeartIcon as HeartOutline } from '@heroicons/react/24/outline';
+import { HeartIcon as HeartSolid } from '@heroicons/react/24/solid';
 import { SearchResultCardProps } from './SearchResultCard.types';
+import { useLike } from 'hooks/useLike';
+
 const SearchResultCard: React.FC<SearchResultCardProps> = ({
   title,
   description,
   imageUrl,
   minPrice,
   onClick,
+  serviceId,
 }) => {
+
+  const { handleLikeClick, isLoading, likedServices } = useLike({serviceId});
+
   return (
     <div className="flex bg-white shadow-md rounded-lg overflow-hidden mb-4">
       <div className="flex-shrink-0 relative w-[45%] h-64">
@@ -16,8 +23,16 @@ const SearchResultCard: React.FC<SearchResultCardProps> = ({
           alt={title} 
           className="w-full h-full object-cover"
         />
-        <button className="absolute top-4 left-4 text-white">
-          <HeartIcon className="w-6 h-6" />
+        <button 
+          className="absolute top-4 left-4 text-white"
+          onClick={handleLikeClick}
+          disabled={isLoading}
+        >
+          {likedServices.has(serviceId) ? (
+            <HeartSolid className="w-6 h-6 text-red-600" />
+          ) : (
+            <HeartOutline className="w-6 h-6" />
+          )}
         </button>
       </div>
       

@@ -3,6 +3,9 @@ import { useState, useEffect } from 'react';
 
 import { Service } from '../../types/ServiceTypes';
 import { useRouter } from 'next/router';
+import { fetchLikedServices } from 'utils/fetchServices';
+import { useSelector } from 'react-redux';
+import { RootState } from 'store';
 
 
 export const useSearchPage = () => {
@@ -23,6 +26,7 @@ export const useSearchPage = () => {
     const router = useRouter();
   
     const handleServiceClick = (service: Service) => {
+      console.log('service', service);
       setSelectedService(service);
       // Update URL without page reload
       router.push(`/services/${service.id}`, undefined, { shallow: true });
@@ -32,8 +36,6 @@ export const useSearchPage = () => {
       setSelectedService(null);
       window.history.pushState({}, '', '/services');
     };
-  
-
 
     const handleSearch = (name: string, location?: string) => {
         setNameSearch(name);

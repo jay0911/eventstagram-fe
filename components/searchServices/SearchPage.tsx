@@ -8,6 +8,7 @@ import Pagination from './pagination/Pagination';
 import { useSearchPage } from './SearchPage.hooks';
 
 import ServiceDetails from './serviceDetail/ServiceDetails';
+import { useLike } from 'hooks/useLike';
 
 const SearchPage: React.FC = () => {
 
@@ -42,13 +43,15 @@ const SearchPage: React.FC = () => {
 
   const scrollDirection = useScrollDirection();
 
+
   if (isLoading) return <p>Loading services...</p>;
   if (error instanceof Error) return <p>Error: {error.message}</p>;
 
-
   if (selectedService) {
+    console.log('selectedService', selectedService);
     return (
       <ServiceDetails
+        id={selectedService.id}
         title={selectedService.name}
         images={selectedService.images.map((image) => image.resourceUrl)}
         minPrice={0}
@@ -77,7 +80,15 @@ const SearchPage: React.FC = () => {
       </div>
       <div className="flex-grow p-4 mt-[128px] px-3 md:pl-10 md:pr-10 lg:pl-20 lg:pr-20"> {/* Adjusted margin-top to account for both header and SearchBar */}
         {data?.content.map((result, index) => (
-          <SearchResultCard onClick={() => handleServiceClick(result)} key={index} title={result.name} description={result.description} imageUrl={result.thumbnail?.resourceUrl} minPrice={result?.priceMin} />
+          <SearchResultCard 
+            onClick={() => handleServiceClick(result)} 
+            key={index} 
+            title={result.name} 
+            description={result.description} 
+            imageUrl={result.thumbnail?.resourceUrl} 
+            minPrice={result?.priceMin}
+            serviceId={result.id}
+          />
         ))}
       </div>
       {/* Add Pagination component */}
