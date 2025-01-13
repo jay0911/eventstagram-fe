@@ -36,6 +36,7 @@ const ServiceDetailsPage = () => {
 
   return (
     <ServiceDetails
+      id={service.id}
       title={service.name}
       images={service.images.map((image) => image.resourceUrl)}
       minPrice={0}

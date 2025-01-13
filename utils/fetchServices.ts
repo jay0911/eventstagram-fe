@@ -1,5 +1,6 @@
 // utils/fetchServices.ts
 import { Service, ServicesResponse, ServiceStatistics } from '../types/ServiceTypes';
+import api from './fetchClient';
 
 export const fetchServices = async (
   name: string,
@@ -24,29 +25,21 @@ export const fetchServices = async (
 
   const url = `${baseUrl}?${params.toString()}`;
 
-  const response = await fetch(url);
-
-  if (!response.ok) {
-    throw new Error(`Failed to fetch services. Status: ${response.status}`);
-  }
-
-  return response.json();
+  const response = await api.fetch(url);
+  return response;
 };
 
 export const fetchServiceStatistics = async (): Promise<ServiceStatistics> => {
-  const response = await fetch('/api/services/statistics');
-
-  if (!response.ok) {
-    throw new Error(`Failed to fetch service statistics. Status: ${response.status}`);
-  }
-
-  return response.json();
+  const response = await api.fetch('/api/services/statistics');
+  return response;
 };
 
 export const fetchServiceById = async (id: string): Promise<Service> => {
-  const response = await fetch(`/api/services/${id}`);
-  if (!response.ok) {
-      throw new Error('Service not found');
-  }
-  return response.json();
+  const response = await api.fetch(`/api/services/${id}`);
+  return response;
+};
+
+export const fetchLikedServices = async (userEmail: string): Promise<string[]> => {
+  const response = await api.fetch(`/api/services/users/${userEmail}/likes`);
+  return response.map((service: any) => service.id);
 };
