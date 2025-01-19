@@ -1,14 +1,11 @@
 import React from 'react';
 import SearchBar from './searchBar/SearchBar';
-import SearchResultCard from './searchResultCard/SearchResultCard';
+import SearchResultCard from '../common/searchResultCard/SearchResultCard';
 import FullScreenSearchModal from './modals/searchServiceModal/SeachServiceModal';
 import FullScreenSortModal from './modals/sortSearchServiceModal/FullScreenSortModal';
 import FullScreenPriceRangeModal from './modals/priceRangeSearchServiceModal/PriceRangeModal';
-import Pagination from './pagination/Pagination';
+import Pagination from '../common/pagination/Pagination';
 import { useSearchPage } from './SearchPage.hooks';
-
-import ServiceDetails from './serviceDetail/ServiceDetails';
-import { useLike } from 'hooks/useLike';
 
 const SearchPage: React.FC = () => {
 
@@ -36,7 +33,6 @@ const SearchPage: React.FC = () => {
     setIsPriceModalOpen,
     useScrollDirection,
     availableLocation,
-    selectedService,
     handleServiceClick,
     handleBack,
   } = useSearchPage();
@@ -47,19 +43,6 @@ const SearchPage: React.FC = () => {
   if (isLoading) return <p>Loading services...</p>;
   if (error instanceof Error) return <p>Error: {error.message}</p>;
 
-  if (selectedService) {
-    console.log('selectedService', selectedService);
-    return (
-      <ServiceDetails
-        id={selectedService.id}
-        title={selectedService.name}
-        images={selectedService.images.map((image) => image.resourceUrl)}
-        minPrice={0}
-        description={selectedService.description}
-        onBack={handleBack}
-      />
-    );
-  }
 
   return (
     <div className="min-h-screen flex flex-col">

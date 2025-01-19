@@ -1,8 +1,9 @@
 import React from 'react';
 import { HeartIcon as HeartOutline } from '@heroicons/react/24/outline';
 import { HeartIcon as HeartSolid } from '@heroicons/react/24/solid';
+import { SearchResultCardProps } from './SearchResultCard.types';
 import { useLike } from 'hooks/useLike';
-import { SearchResultCardProps } from 'components/common/searchResultCard/SearchResultCard.types';
+
 
 const SearchResultCard: React.FC<SearchResultCardProps> = ({
   title,

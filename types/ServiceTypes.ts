@@ -6,6 +6,14 @@ export interface Image {
     xcoordinate: number;
     ycoordinate: number;
   }
+
+  export interface User {
+    id: string;
+    email: string;
+    googleId: string;
+    imageUrl: string;
+    name: string;
+  }
   
   export interface Service {
     id: string;
@@ -14,12 +22,28 @@ export interface Image {
     websiteLink: string;
     email: string;
     phoneNumber: string;
+    createdBy: User;
     images: Image[];
     thumbnail: Image; 
     tags: string[];
     isEnabled: boolean;
     priceMin: number;
     priceMax: number;
+    availableLocation: string;
+  }
+
+  export interface ServiceFormData {
+    images: File[];
+    thumbnail: File | null;
+    name: string;
+    description: string;
+    websiteLink: string;
+    email: string;
+    priceMin: number;
+    priceMax: number;
+    phoneNumber: string;
+    tags: string[];
+    availableLocation: string;
   }
   
   export interface Sort {

@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { ServicesResponse, ServiceStatistics, Service } from "types/ServiceTypes";
-import { fetchServiceById, fetchServices, fetchServiceStatistics } from "utils/fetchServices";
+import { fetchServiceById, fetchServices, fetchServiceStatistics } from "api/fetchServices";
 
 export const useServices = (
-    name: string,
+    name?: string,
     page: number = 0,
     sortBy: string = 'name',
     sortOrder: 'asc' | 'desc' = 'asc',
@@ -14,7 +14,7 @@ export const useServices = (
     return useQuery<ServicesResponse>(
       {
         queryKey: ['services', name, page, sortBy, sortOrder, minPrice, maxPrice, availableLocation],
-        queryFn: () => fetchServices(name, page, sortBy, sortOrder, minPrice, maxPrice, availableLocation),
+        queryFn: () => fetchServices({ name, page, sortBy, sortOrder, minPrice, maxPrice, availableLocation }),
       }
     );
 };

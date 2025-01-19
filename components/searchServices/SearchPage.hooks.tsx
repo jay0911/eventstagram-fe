@@ -3,10 +3,6 @@ import { useState, useEffect } from 'react';
 
 import { Service } from '../../types/ServiceTypes';
 import { useRouter } from 'next/router';
-import { fetchLikedServices } from 'utils/fetchServices';
-import { useSelector } from 'react-redux';
-import { RootState } from 'store';
-
 
 export const useSearchPage = () => {
 

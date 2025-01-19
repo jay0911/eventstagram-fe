@@ -4,12 +4,14 @@ import { cookieService } from '../../utils/cookieService';
 interface AuthState {
   user: any | null;
   isAuthenticated: boolean;
+  isLoaded: boolean;
 }
 
 // Initialize state without accessing cookies
 const initialState: AuthState = {
   user: null,
-  isAuthenticated: false
+  isAuthenticated: false,
+  isLoaded: false
 };
 
 export const authSlice = createSlice({
@@ -29,6 +31,7 @@ export const authSlice = createSlice({
       const user = cookieService.getUser();
       state.user = user;
       state.isAuthenticated = !!user;
+      state.isLoaded = true;
     }
   }
 });

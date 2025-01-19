@@ -18,7 +18,7 @@ const ServiceDetailsPage = () => {
   const { data: service, isLoading, error } = useServiceById(id as string);
 
   const handleBack = () => {
-    router.push('/services');
+    router.back();
   };
 
   // Add check for loading state
@@ -34,6 +34,8 @@ const ServiceDetailsPage = () => {
     return null;
   }
 
+  console.log('service', service);
+
   return (
     <ServiceDetails
       id={service.id}
@@ -42,6 +44,7 @@ const ServiceDetailsPage = () => {
       minPrice={0}
       description={service.description}
       onBack={handleBack}
+      ownerEmail={service.createdBy.email}
     />
   );
 };

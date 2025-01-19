@@ -4,7 +4,8 @@ import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
 import { HeartIcon as HeartOutline } from '@heroicons/react/24/outline';
 import { HeartIcon as HeartSolid } from '@heroicons/react/24/solid';
 import { useLike } from 'hooks/useLike';
-
+import { useSelector } from 'react-redux';
+import { RootState } from 'store';
 
 interface ServiceDetailsProps {
   id: string;
@@ -13,6 +14,7 @@ interface ServiceDetailsProps {
   images: string[];
   minPrice: number;
   onBack: () => void;
+  ownerEmail: string;
 }
 
 const ServiceDetails: React.FC<ServiceDetailsProps> = ({
@@ -22,10 +24,12 @@ const ServiceDetails: React.FC<ServiceDetailsProps> = ({
   images,
   minPrice,
   onBack,
+  ownerEmail,
 }) => {
-
+  console.log('ownerEmail', ownerEmail);
+  const { user } = useSelector((state: RootState) => state.auth);
+  const isOwner = user?.email === ownerEmail;
   const { handleLikeClick, isLoading, likedServices } = useLike({serviceId: id});
-
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const nextImage = (e: React.MouseEvent) => {
@@ -119,7 +123,7 @@ const ServiceDetails: React.FC<ServiceDetailsProps> = ({
         </div>
 
         {/* Content */}
-        <div className=" mx-auto px-2 py-6">
+        <div className="mx-auto px-2 py-6">
           <h1 className="text-2xl sm:text-3xl font-bold text-red-600 mb-4">
             {title}
           </h1>
@@ -141,14 +145,16 @@ const ServiceDetails: React.FC<ServiceDetailsProps> = ({
         </div>
       </div>
 
-      {/* Fixed Bottom CTA */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white pb-12">
-        <div className="max-w-4xl mx-auto">
-          <button className="w-full bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 font-medium">
-            Book Now
-          </button>
+      {/* Fixed Bottom CTA - Only show if not owner */}
+      {!isOwner && (
+        <div className="fixed bottom-0 left-0 right-0 bg-white pb-12 mx-8">
+          <div className="max-w-4xl mx-auto">
+            <button className="w-full bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 font-medium">
+              Book Now
+            </button>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

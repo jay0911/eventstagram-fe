@@ -5,4 +5,5 @@ export interface SearchResultCardProps {
     minPrice: number;
     onClick: () => void;
     serviceId: string;
+    onLikeToggle?: () => void;
   }

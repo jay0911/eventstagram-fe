@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../../store/auth/authSlice';
 import CloseIcon from '@mui/icons-material/Close';
 import Image from 'next/image';
+import Link from 'next/link';
 
 interface NavigationDrawerProps {
   open: boolean;
@@ -107,24 +108,34 @@ export default function NavigationDrawer({ open, onClose, onLogout }: Navigation
           {/* Navigation Items */}
           <Box sx={{ my: 2 }}>
             {[
-              'My events', 
-              'FAQs'
-            ].map((text) => (
-              <Button
-                key={text}
-                fullWidth
-                sx={{ 
-                  justifyContent: 'flex-start', 
-                  textTransform: 'none', 
-                  py: 1.5,
-                  color: 'text.primary',
-                  '&:hover': {
-                    backgroundColor: 'rgba(0, 0, 0, 0.04)'
-                  }
-                }}
+              { text: 'Find Services', href: '/services' },
+              { text: 'Create Service', href: '/services/create' },
+              { text: 'My Services', href: '/services/my-services' },
+              { text: 'Liked Services', href: '/services/liked' },
+              { text: 'My events', href: '/my-events' },
+              { text: 'FAQs', href: '/faqs' }
+            ].map((item) => (
+              <Link
+                key={item.text}
+                href={item.href}
+                style={{ textDecoration: 'none', width: '100%', display: 'block' }}
+                onClick={onClose}
               >
-                {text}
-              </Button>
+                <Button
+                  fullWidth
+                  sx={{ 
+                    justifyContent: 'flex-start', 
+                    textTransform: 'none', 
+                    py: 1.5,
+                    color: 'text.primary',
+                    '&:hover': {
+                      backgroundColor: 'rgba(0, 0, 0, 0.04)'
+                    }
+                  }}
+                >
+                  {item.text}
+                </Button>
+              </Link>
             ))}
           </Box>
 
